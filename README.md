@@ -6,6 +6,38 @@ An automated tool that converts DAX (Data Analysis Expressions) from Azure Analy
 
 This project uses LangChain with Databricks' Claude Sonnet 4 LLM to intelligently convert DAX measures from Azure Analysis Services into SparkSQL metric definitions for Unity Catalog. The converter processes metrics in batches and can handle conversions in parallel for improved performance.
 
+## 🏗️ Architecture
+
+```mermaid
+flowchart TB
+    AAS[("Azure Analysis Services<br/>(AAS)")]
+    Metrics[("📄 metrics.json<br/>{name, expression}")]
+    Prompt[("📋 Prompt<br/>Instructions + Examples<br/>DAX → SparkSQL")]
+    Converter[("🔗 Converter<br/>(LangChain)")]
+    LLM[("🤖 Databricks<br/>Model Serving Endpoint<br/>(Claude Sonnet 4)")]
+    Output[("📝 UC Metrics<br/>(YAML/SparkSQL)")]
+    
+    AAS -->|"1. Extract Metrics<br/>(Manual)"| Metrics
+    Metrics -->|"2. Reads DAX<br/>Metrics"| Converter
+    Prompt -->|"3. Injects metrics<br/>to the prompt"| Converter
+    Converter -->|"4. Provide prompt to<br/>Databricks Model"| LLM
+    LLM -->|"5. Writes results as YAML<br/>containing SparkSQL expressions"| Output
+    
+    style AAS fill:#4A90E2
+    style Metrics fill:#F5F5F5
+    style Prompt fill:#4A90E2
+    style Converter fill:#2C3E50
+    style LLM fill:#E74C3C
+    style Output fill:#F39C12
+```
+
+**Workflow:**
+1. **Extract Metrics** - Manually export DAX measures from Azure Analysis Services
+2. **Read Metrics** - Converter reads the `metrics.json` file containing DAX expressions
+3. **Inject to Prompt** - Metrics are injected into a prompt with instructions and conversion examples
+4. **LLM Processing** - Prompt is sent to Databricks Claude Sonnet 4 endpoint for conversion
+5. **Generate Output** - Results are written as YAML files with SparkSQL UC Metric View definitions
+
 ## 📋 Prerequisites
 
 - Python 3.12
