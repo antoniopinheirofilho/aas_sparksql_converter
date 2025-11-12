@@ -8,28 +8,7 @@ This project uses LangChain with Databricks' Claude Sonnet 4 LLM to intelligentl
 
 ## 🏗️ Architecture
 
-```mermaid
-flowchart TB
-    AAS[("Azure Analysis Services<br/>(AAS)")]
-    Metrics[("📄 metrics.json<br/>{name, expression}")]
-    Prompt[("📋 Prompt<br/>Instructions + Examples<br/>DAX → SparkSQL")]
-    Converter[("🔗 Converter<br/>(LangChain)")]
-    LLM[("🤖 Databricks<br/>Model Serving Endpoint<br/>(Claude Sonnet 4)")]
-    Output[("📝 UC Metrics<br/>(YAML/SparkSQL)")]
-    
-    AAS -->|"1. Extract Metrics<br/>(Manual)"| Metrics
-    Metrics -->|"2. Reads DAX<br/>Metrics"| Converter
-    Prompt -->|"3. Injects metrics<br/>to the prompt"| Converter
-    Converter -->|"4. Provide prompt to<br/>Databricks Model"| LLM
-    LLM -->|"5. Writes results as YAML<br/>containing SparkSQL expressions"| Output
-    
-    style AAS fill:#4A90E2
-    style Metrics fill:#F5F5F5
-    style Prompt fill:#4A90E2
-    style Converter fill:#2C3E50
-    style LLM fill:#E74C3C
-    style Output fill:#F39C12
-```
+![High Level Architecture Flow](high_level_flow.png)
 
 **Workflow:**
 1. **Extract Metrics** - Manually export DAX measures from Azure Analysis Services
