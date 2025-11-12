@@ -1,0 +1,41 @@
+# COMBINED DAX to SparkSQL UC Metric View Conversion Results
+# Generated on: 2025-11-12 09:33:55
+# Combined from 1 batch files
+
+====================================================================================================
+
+
+############################################################
+# BATCH 1 - Source: converted_metrics_20251112_093355.txt
+############################################################
+
+Based on the provided DAX expressions, here are the converted Unity Catalog Metric View measures in SparkSQL format:
+
+```yaml
+- name: Val City Taxes
+  # SUM('Fato Sales'[CITY_TAX])
+  expr: SUM(CITY_TAX)
+
+- name: Val State Taxes
+  # SUM('Fato Sales'[STATE_TAX])
+  expr: SUM(STATE_TAX)
+
+- name: Val Total Taxes
+  # [Val City Taxes]+[Val State Taxes]
+  expr: SUM(CITY_TAX) + SUM(STATE_TAX)
+```
+
+### Conversion Notes:
+
+1. **Val City Taxes**: Direct conversion from DAX SUM function to SparkSQL SUM, removing the table reference as it's implicit in the metric view context.
+
+2. **Val State Taxes**: Same pattern as above - straightforward SUM aggregation.
+
+3. **Val Total Taxes**: The DAX expression references other measures using square brackets. In SparkSQL for UC Metric Views, I've expanded this to the underlying calculations (SUM(CITY_TAX) + SUM(STATE_TAX)) rather than using measure references, which maintains the same logic while being more explicit and performant.
+
+All conversions maintain the original intent and logic of the DAX expressions while following SparkSQL syntax conventions for Unity Catalog Metric Views.
+
+====================================================================================================
+# SUMMARY: Total 3 metrics converted from 1 batches
+# Combined file generated: 2025-11-12 09:33:55
+====================================================================================================

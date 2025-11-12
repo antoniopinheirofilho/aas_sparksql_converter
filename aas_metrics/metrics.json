@@ -1,0 +1,14 @@
+{ "measures": [
+  {
+    "name": "Total Revenue",
+    "expression": "SUM('FactSales'[Revenue])"
+  },
+  {
+    "name": "Total Quantity",
+    "expression": "SUM('FactSales'[Quantity])"
+  },
+  {
+    "name": "Average Price",
+    "expression": "DIVIDE([Total Revenue], [Total Quantity])"
+  }]
+}
